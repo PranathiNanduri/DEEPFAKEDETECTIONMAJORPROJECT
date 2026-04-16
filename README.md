@@ -203,9 +203,6 @@ Developed by **[Your Name]** as a B.Tech Final Year Major Project.
 
 **Domain:** Artificial Intelligence · Computer Vision · Media Forensics
 
-> Open to full-time opportunities in Machine Learning, Computer Vision, and AI Engineering.
-> Connect with me on  [Linkedin  https://www.linkedin.com/in/pranathi-nanduri/recent-activity/all/](#) | GIthub: [Pranathi-nanduri](#)
 
----
 
 *This project is intended for academic and research purposes.*
