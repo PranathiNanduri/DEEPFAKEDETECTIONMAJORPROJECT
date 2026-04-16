@@ -17,7 +17,7 @@ This project was built as a B.Tech final year major project to address the growi
 
 ---
 
-## Key Highlights (Recruiter Summary)
+## Key Highlights 
 
 | Area | What Was Built |
 |------|----------------|
@@ -204,7 +204,7 @@ Developed by **[Your Name]** as a B.Tech Final Year Major Project.
 **Domain:** Artificial Intelligence · Computer Vision · Media Forensics
 
 > Open to full-time opportunities in Machine Learning, Computer Vision, and AI Engineering.
-> Connect with me on [LinkedIn](#) | [GitHub](#)
+> Connect with me on  [Linkedin  https://www.linkedin.com/in/pranathi-nanduri/recent-activity/all/](#) | GIthub: [Pranathi-nanduri](#)
 
 ---
 
