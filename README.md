@@ -1,273 +1,135 @@
-# DEEPFAKEDETECTIONMAJORPROJECT
-# DEEPFAKEDETECTIONMAJORPROJECT
-# 🛡️ Deepfake Detection System using Hybrid Deep Learning and Computer Vision
+Overview
+An end-to-end deepfake detection system that classifies facial media as REAL, FAKE, or SPOOF using a hybrid architecture combining spatial deep learning with frequency-domain analytics. The system supports image, video, and real-time webcam detection, with explainable AI outputs via Grad-CAM heatmaps.
+This project was built as a B.Tech final year major project to address the growing challenge of AI-generated synthetic media.
 
-A robust AI-powered Deepfake Detection System built using **Deep Learning**, **Computer Vision**, and **Frequency Domain Analytics** to classify facial media as:
+Key Highlights (Recruiter Summary)
+AreaWhat Was BuiltML ArchitectureDual-branch hybrid model: ResNet18 CNN + Random Forest on FFT featuresComputer VisionFace detection, centroid tracking, Grad-CAM explainabilityFull-StackStreamlit web app with image/video/webcam uploadData EngineeringCustom preprocessing pipeline for 3 classes across image & videoMLOpsPersistent SQLite logging of predictions, confidence scores, and heatmapsReal-Time SystemLive webcam inference pipeline with per-frame classification
 
-- **REAL**
-- **FAKE**
-- **SPOOF**
+Technical Architecture
+Input Media (Image / Video / Webcam)
+         ↓
+   Face Detection
+         ↓
+  ┌──────────────────────────┐
+  │   Spatial Branch         │    ResNet18 CNN
+  │   (Deep Learning)        │    → Facial pattern features
+  └──────────┬───────────────┘
+             │
+  ┌──────────────────────────┐
+  │   Frequency Branch       │    FFT + Laplacian + Edge Density
+  │   (Classical ML)         │    → Compression & noise artifacts
+  └──────────┬───────────────┘
+             │
+       Prediction Fusion
+             ↓
+   Final Label + Confidence
+             ↓
+  Grad-CAM Heatmap + DB Log
 
-The system supports:
+Features
+Multi-Modal Detection
+Supports image uploads, video file processing, and live webcam feed with per-frame predictions.
+Hybrid ML Pipeline
+Combines a fine-tuned ResNet18 CNN for spatial feature extraction with a Random Forest classifier trained on frequency-domain signals — including FFT spectrum analysis, Laplacian blur, edge density, noise analysis, compression artifact scoring, and blockiness detection.
+Explainable AI (XAI)
+Generates Grad-CAM heatmaps to visually highlight the facial regions most influential in each prediction, making the model interpretable and audit-ready.
+Persistent Logging
+All predictions are stored in a SQLite database with prediction label, confidence score, analytics metrics, heatmap path, and timestamp for traceability.
+Interactive Web Application
+Clean Streamlit-based frontend for non-technical users to upload and analyze media with visual feedback.
 
-- **Image Detection**
-- **Video Detection**
-- **Real-Time Webcam Detection**
-- **Grad-CAM Heatmap Visualization**
-- **Database Logging**
-- **Interactive Web Application**
+Tech Stack
+CategoryTechnologiesDeep LearningPyTorch, ResNet18 (transfer learning)Classical MLScikit-learn, Random ForestComputer VisionOpenCV, FFT (NumPy), Grad-CAMWeb AppStreamlitDatabaseSQLiteLanguagePython 3.8+
 
----
+Project Structure
+DEEPFAKEDETECTION/
+├── analytics/              # Detection logging utilities
+├── data/
+│   ├── processed_faces/    # Organized real/fake/spoof training data
+│   └── raw_videos/         # Raw video inputs
+├── database/               # SQLite schema and setup
+├── explainability/         # Grad-CAM visualization module
+├── face_tracking/          # Centroid tracker for video inference
+├── inference/              # Image and video inference scripts
+├── models/
+│   ├── saved_models/       # Trained model weights (.pth)
+│   ├── spatial_cnn/        # ResNet18 training pipeline
+│   └── frequency_branch/   # Random Forest training pipeline
+├── realtime_system/        # Webcam detection pipeline
+├── webapp/                 # Streamlit web application
+└── requirements.txt
 
-# 🚀 Features
+Getting Started
+Prerequisites
 
-### ✅ Hybrid Detection Architecture
-Combines:
+Python 3.8+
+pip
 
-- Spatial CNN (Deep Learning Face Classification)
-- Frequency Domain Analysis (FFT / Noise / Compression Artifacts)
-- Computer Vision Analytics
-
----
-
-### ✅ Multi-Modal Input Support
-
-Detect deepfakes from:
-
-- Uploaded Images
-- Uploaded Videos
-- Live Webcam Feed
-
----
-
-### ✅ Explainable AI
-
-Generates:
-
-- **Grad-CAM Heatmaps**
-- Model Attention Visualization
-
----
-
-### ✅ Database Logging
-
-Stores detection records including:
-
-- Prediction Label
-- Confidence Score
-- Analytics Metrics
-- Heatmap Path
-- Timestamp
-
----
-
-### ✅ Real-Time Detection Pipeline
-
-Supports:
-
-- Live webcam facial analysis
-- Real/Fake/Spoof prediction
-- Heatmap saving during runtime
-
----
-
-
-# 🧠 Machine Learning Algorithms Used
-
-## Spatial Branch
-
-Uses:
-
-- **ResNet18 CNN**
-- Feature Learning from Facial Spatial Patterns
-
----
-
-## Frequency Branch
-
-Uses:
-
-- **Random Forest Classifier**
-- Frequency Domain Feature Extraction
-
-Features:
-
-- FFT Spectrum Analysis
-- Laplacian Blur Detection
-- Edge Density
-- Noise Analysis
-- Compression Artifact Detection
-- Blockiness Detection
-
----
-
-# 📊 Detection Pipeline
-
-```text
-Input Media
-   ↓
-Face Detection
-   ↓
-Spatial CNN Inference
-   ↓
-Frequency Analytics Extraction
-   ↓
-Prediction Fusion Layer
-   ↓
-Final Classification
-   ↓
-Heatmap + Logging
-```
-
----
-
-# 🔥 Installation Guide
-
-## Clone Repository
-
-```bash
-git clone <your-repo-link>
+Installation
+bash# Clone the repository
+git clone <your-repo-url>
 cd DEEPFAKEDETECTION
-```
 
----
-
-## Create Virtual Environment
-
-```bash
+# Create and activate virtual environment
 python -m venv venv
-```
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS/Linux
 
-Activate:
-
-### Windows:
-
-```bash
-venv\Scripts\activate
-```
-
----
-
-## Install Requirements
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
----
-
-# ⚙️ Database Setup
-
-```bash
+# Initialize the database
 python database/create_database.py
-```
-
----
-
-# 🏋️ Training Models
-
-## Train Spatial CNN
-
-```bash
+Training the Models
+bash# Train spatial CNN (ResNet18)
 python models/spatial_cnn/train_spatial_model.py
-```
 
----
-
-## Train Frequency Model
-
-```bash
+# Train frequency classifier (Random Forest)
 python models/frequency_branch/train_frequency_model.py
-```
-
----
-
-# 🧪 Testing
-
-## Test on Image
-
-```bash
+Running Inference
+bash# Test on a single image
 python inference/test_on_file.py --path data/processed_faces/real/sample.jpg
-```
 
----
-
-## Test on Video
-
-```bash
+# Test on a video file
 python inference/test_on_file.py --path data/raw_videos/fake/fake1.mp4
-```
 
----
-
-# 🎥 Real-Time Webcam Detection
-
-```bash
+# Launch real-time webcam detection (press Q to quit)
 python realtime_system/realtime_pipeline.py
-```
 
-Press:
-
-```bash
-Q → Quit Webcam
-```
-
----
-
-# 🌐 Run Web Application
-
-```bash
+# Launch the web application
 streamlit run webapp/app.py
-```
 
----
+Example Output
+Input:   Real human face
+Output:  Prediction: REAL  |  Confidence: 0.94
 
-# 📈 Example Output
+Input:   Deepfake / phone screen
+Output:  Prediction: FAKE  |  Confidence: 0.91
 
-### Input:
+What I Learned
 
-- Real Human Face
+Designing and implementing a multi-branch ML architecture from scratch
+Applying transfer learning with ResNet18 for domain-specific classification
+Extracting and engineering frequency-domain features using FFT and OpenCV
+Building an explainable AI pipeline with Grad-CAM for model interpretability
+Integrating inference systems with a full-stack web application and persistent storage
 
-### Output:
 
-```text
-Prediction: REAL
-Confidence: 0.94
-```
+Roadmap
 
----
+ Temporal LSTM branch for video sequence modeling
+ Transformer-based detection (ViT)
+ Face recognition integration for identity-aware analysis
+ Cloud deployment (AWS / GCP)
+ Mobile application support
 
-### Input:
 
-- Phone Screen / Deepfake Face
+About
+Developed by [N. Pranathi] as a B.Tech Final Year Major Project.
+Domain: Artificial Intelligence · Computer Vision · Media Forensics
 
-### Output:
+Open to full-time opportunities in Machine Learning, Computer Vision, and AI Engineering.
+Connect with me on LinkedIn | GitHub
 
-```text
-Prediction: FAKE
-Confidence: 0.91
-```
 
----
-
-# 📌 Future Enhancements
-
-- Temporal LSTM Branch for Video Sequence Analysis
-- Transformer-Based Detection
-- Face Recognition Integration
-- Cloud Deployment
-- Mobile Application Support
-
----
-
-# 👨‍💻 Author
-
-**Your Name**
-
-Major Project — B.Tech Final Year
-
----
-
-# 📜 License
-
-This project is for educational and research purposes.
+This project is intended for academic and research purposes.
