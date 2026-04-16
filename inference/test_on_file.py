@@ -45,19 +45,19 @@ def final_decision(probs, blur_score):
 
     suspicious_score = max(fake_p, spoof_p)
 
-    # More forgiving for genuine images
-    if real_p >= 0.30:
-        return "REAL", real_p
-
-    # Suspicious screen/fake-like inputs
-    if suspicious_score >= 0.45:
+    # Strong fake/spoof wins first
+    if suspicious_score >= 0.45 and suspicious_score > real_p:
         return "FAKE", suspicious_score
 
+    # Then real if strongest enough
+    if real_p >= 0.35 and real_p > suspicious_score:
+        return "REAL", real_p
+
+    # Blur fallback
     if blur_score < 8:
         return "UNCERTAIN", max(real_p, fake_p, spoof_p)
 
     return "UNCERTAIN", max(real_p, fake_p, spoof_p)
-
 
 def print_prob_block(title, result):
     prob_map = probs_to_map(result)
@@ -171,26 +171,73 @@ def process_video(video_path: Path, sample_every_n=15):
     frame_idx = 0
     fused_history = []
 
+    print("Press q to stop video analysis window.")
+
     while True:
         ok, frame = cap.read()
         if not ok:
             break
 
+        display_frame = frame.copy()
+
         if frame_idx % sample_every_n == 0:
             detected = detect_largest_face(frame)
+
             if detected is not None:
-                face_crop, _ = detected
+                face_crop, (x, y, w, h) = detected
             else:
                 face_crop = frame
+                x, y, w, h = 0, 0, frame.shape[1], frame.shape[0]
 
             spatial = infer_spatial(face_crop)
             frequency = infer_frequency(face_crop)
             fused_probs = fuse_predictions(spatial, frequency)
             fused_history.append(fused_probs)
 
+            final_label, final_conf = final_decision(
+                fused_probs,
+                frequency["analytics"]["blur_score"]
+            )
+
+            if final_label == "REAL":
+                color = (0, 255, 0)
+            elif final_label == "FAKE":
+                color = (0, 0, 255)
+            else:
+                color = (255, 255, 0)
+
+            cv2.rectangle(display_frame, (x, y), (x + w, y + h), color, 2)
+
+            cv2.putText(
+                display_frame,
+                f"{final_label} {final_conf:.2f}",
+                (x, max(y - 10, 20)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.7,
+                color,
+                2
+            )
+
+            cv2.putText(
+                display_frame,
+                f"R:{fused_probs['real']:.2f} F:{fused_probs['fake']:.2f} S:{fused_probs['spoof']:.2f}",
+                (x, min(y + h + 20, display_frame.shape[0] - 10)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (255, 255, 255),
+                1
+            )
+
+        cv2.imshow("Video Analysis", display_frame)
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"):
+            break
+
         frame_idx += 1
 
     cap.release()
+    cv2.destroyAllWindows()
 
     if not fused_history:
         print("No usable frames processed.")
