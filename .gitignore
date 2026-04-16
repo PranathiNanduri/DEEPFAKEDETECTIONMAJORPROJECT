@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+.vscode/
+database/face_database.db
+data/detection_frames/
+data/heatmaps/
+models/saved_models/*.pth
+models/saved_models/*.pt
+models/saved_models/*.joblib
+models/saved_models/*.pkl
