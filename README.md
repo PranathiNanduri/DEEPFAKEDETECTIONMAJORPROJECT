@@ -199,7 +199,7 @@ Output:  Prediction: FAKE  |  Confidence: 0.91
 
 ## About
 
-Developed by **[Your Name]** as a B.Tech Final Year Major Project.
+Developed by **[N.Pranathi]** as a B.Tech Final Year Major Project.
 
 **Domain:** Artificial Intelligence · Computer Vision · Media Forensics
 
